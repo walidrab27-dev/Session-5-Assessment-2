@@ -2,46 +2,24 @@
 {
     class MyCookieCollection
     {
-        private List<Dictionary<string,string>> cookies = new List<Dictionary<string, string>>();
+        private Dictionary<string,string> cookies = new Dictionary<string, string>();
         public string this[string key]
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(key))
-                    throw new ArgumentException("Invalid cookie key");
-                foreach (var dict in cookies)
-                    if (dict.ContainsKey(key))
-                        return dict[key];
-                return null;
+                cookies.TryGetValue(key, out string value);
+                return value;
             }
             set
             {
-                if (string.IsNullOrWhiteSpace(key))
-                    throw new ArgumentException("Invalid cookie key");
-                foreach (var dict in cookies)
-                {
-                    if (dict.ContainsKey(key))
-                    {
-                        dict[key] = value;
-                        return;
-                    }
-                }
-                cookies.Add(new Dictionary<string, string> { { key, value } });
+               cookies[key] = value;
             }
         }
         public void PrintAllCookies()
         {
-            if (cookies.Count==0)
+            foreach (var cookie in cookies)
             {
-                Console.WriteLine("No cookies found.");
-                return;
-            }
-            foreach(var dict in cookies)
-            {
-                foreach (var cookie in dict)
-                {
-                    Console.WriteLine($"{cookie.Key} = {cookie.Value}");
-                }
+                Console.WriteLine($"{cookie.Key}: {cookie.Value}");
             }
         }
     }
